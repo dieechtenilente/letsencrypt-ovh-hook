@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 import logging
@@ -55,7 +55,7 @@ def check_if_record_is_deployed(domain, dns_record, token):
     """
     Retrieve names servers of the domain, and check DNS record presence.
     """
-    dns_servers = dns.resolver.query(domain, 'NS')
+    dns_servers = dns.resolver.resolve(domain, 'NS')
     resolver = dns.resolver.Resolver()
     resolver.nameservers = []
     resolver.timeout = 3
@@ -68,7 +68,7 @@ def check_if_record_is_deployed(domain, dns_record, token):
         logger.debug(" + Testing DNS record against %s", ', '.join(resolver.nameservers))
         txt_values = []
         try:
-            txt_records = resolver.query('{}.{}'.format(dns_record, domain), 'TXT')
+            txt_records = resolver.resolve('{}.{}'.format(dns_record, domain), 'TXT')
             for txt_record in txt_records:
                 txt_values.append(txt_record.to_text())
             for txt_value in txt_values:
@@ -152,7 +152,7 @@ def deploy_cert(args):
 
 def unchanged_cert(args):
     domain = args[0]
-    logger.info("Certificate for '%s' is still valid.", domain)
+    #logger.info("Certificate for '%s' is still valid.", domain)
     return
 
 def invalid_challenge(args):
